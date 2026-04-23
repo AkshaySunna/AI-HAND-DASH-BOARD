@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AI Hand IND — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--bg2:#12151c;--surface:#181c26;--surface2:#1e2330;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --text:#f0f0ee;--text2:#9098ae;--text3:#525a6e;
+  --accent:#4f8ef7;--green:#34c77b;--green-dim:#1a4a35;
+  --amber:#f5a623;--amber-dim:#4a3412;--red:#f04f4f;--red-dim:#4a1515;
+  --purple:#8b5cf6;--teal:#2dd4bf;--pink:#ec4899;
+  --r:12px;--r-sm:8px;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.page{max-width:1200px;margin:0 auto;padding:28px 24px 60px}
+
+/* HEADER */
+.hdr{position:relative;border:1px solid var(--border2);border-radius:16px;padding:28px 32px;margin-bottom:20px;overflow:hidden;background:var(--surface)}
+.hdr-glow1{position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(79,142,247,0.14) 0%,transparent 65%);pointer-events:none}
+.hdr-glow2{position:absolute;bottom:-50px;left:160px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,0.08) 0%,transparent 65%);pointer-events:none}
+.hdr-inner{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
+.hdr-eyebrow{font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.hdr-title{font-size:28px;font-weight:600;letter-spacing:-0.03em;color:var(--text)}
+.hdr-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:5px 13px;border-radius:100px;border:1px solid transparent;white-space:nowrap}
+.pill-amber{background:var(--amber-dim);color:var(--amber);border-color:rgba(245,166,35,0.25)}
+.pill-blue{background:rgba(79,142,247,0.1);color:var(--accent);border-color:rgba(79,142,247,0.22)}
+.pill-green{background:var(--green-dim);color:var(--green);border-color:rgba(52,199,123,0.22)}
+.pill-red{background:var(--red-dim);color:var(--red);border-color:rgba(240,79,79,0.22)}
+.pill-gray{background:rgba(255,255,255,0.04);color:var(--text3);border-color:var(--border2)}
+.pill-row{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-amber{background:var(--amber)}.dot-green{background:var(--green)}.dot-red{background:var(--red)}.dot-blue{background:var(--accent)}
+
+/* REFRESH */
+.rbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+.rbar-info{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace}
+.rbtn{background:var(--surface);border:1px solid var(--border2);color:var(--text2);font-size:12px;padding:6px 16px;border-radius:var(--r-sm);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.rbtn:hover{background:var(--surface2);color:var(--text);border-color:var(--accent)}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .2s,transform .15s}
+.metric:hover{border-color:var(--border2);transform:translateY(-2px)}
+.metric-lbl{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.metric-val{font-size:32px;font-weight:600;letter-spacing:-0.04em;line-height:1}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:5px}
+.c-accent{color:var(--accent)}.c-green{color:var(--green)}.c-amber{color:var(--amber)}.c-red{color:var(--red)}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px}
+.card-title{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.card-meta{font-size:11px;color:var(--text3)}
+
+/* SECTION DIVIDER */
+.sdiv{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* GANTT */
+.gantt-hdr{display:flex;margin-bottom:6px}
+.gantt-lbl-space{width:192px;flex-shrink:0}
+.gantt-dates-row{flex:1;display:flex;justify-content:space-between}
+.gantt-date-lbl{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace}
+.g-row{display:flex;align-items:center;margin-bottom:4px}
+.g-label{width:192px;flex-shrink:0;font-size:12px;color:var(--text2);padding-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-track{flex:1;height:22px;background:var(--bg2);border-radius:5px;position:relative;overflow:visible}
+.g-bar{position:absolute;top:4px;height:14px;border-radius:4px;opacity:.88;transition:opacity .2s}
+.g-bar:hover{opacity:1}
+.g-today{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--red);z-index:5;border-radius:1px}
+.g-today-label{position:absolute;top:-18px;left:3px;font-size:9px;color:var(--red);font-family:'DM Mono',monospace;white-space:nowrap}
+.g-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.g-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}
+.g-leg-sw{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* VENDOR GRID */
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px}
+.vc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;transition:border-color .2s,transform .15s;cursor:default}
+.vc:hover{border-color:var(--border2);transform:translateY(-2px)}
+.vc.flagged{border-color:rgba(240,79,79,0.3)}
+.vc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.vc-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
+.vc-region{font-size:10px;color:var(--text3);margin-top:1px}
+.vc-count{font-size:22px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;line-height:1;text-align:right}
+.vc-count-lbl{font-size:9px;color:var(--text3);text-align:right}
+.vc-track{height:3px;background:var(--border2);border-radius:2px;overflow:hidden;margin-bottom:11px}
+.vc-fill{height:100%;border-radius:2px;background:var(--accent)}
+.vc-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px}
+.vc-flag{font-size:10px;color:var(--red);display:flex;align-items:center;gap:3px}
+.vc-info{font-size:10px;color:var(--text3)}
+
+/* WORKSTREAM */
+.ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+@media(max-width:680px){.ws-grid{grid-template-columns:1fr}}
+.ws-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}
+.ws-item:last-child{border-bottom:none}
+.ws-name{font-size:12px;color:var(--text2);flex:1;padding-right:8px;line-height:1.4}
+.ws-badge{font-size:10px;font-weight:500;padding:2px 9px;border-radius:100px;white-space:nowrap;flex-shrink:0}
+.ws-pending{background:rgba(245,166,35,0.1);color:var(--amber)}
+.ws-untested{background:rgba(255,255,255,0.05);color:var(--text3)}
+.ws-done{background:var(--green-dim);color:var(--green)}
+.ws-active{background:rgba(79,142,247,0.1);color:var(--accent)}
+
+/* LOADING / ERROR */
+.loading{text-align:center;padding:80px 20px;color:var(--text3)}
+.spinner{width:30px;height:30px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,79,79,0.2);border-radius:var(--r-sm);padding:12px 16px;font-size:13px;margin-bottom:16px}
+
+/* FADE IN */
+.fi{animation:fadeIn .4s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media(max-width:700px){
+  .g-label{width:120px}.gantt-lbl-space{width:120px}
+  .hdr-title{font-size:22px}
+  .metric-val{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr fi">
+    <div class="hdr-glow1"></div><div class="hdr-glow2"></div>
+    <div class="hdr-inner">
+      <div>
+        <div class="hdr-eyebrow">Project Intelligence</div>
+        <div class="hdr-title">AI Hand IND</div>
+        <div class="hdr-sub">Manufacturing &amp; Procurement Executive Dashboard</div>
+      </div>
+      <div class="hdr-right">
+        <div class="pill-row">
+          <span class="pill pill-amber"><span class="dot dot-amber"></span><span id="days-left">—</span> days left</span>
+          <span class="pill pill-blue">Deadline: Jun 21, 2026</span>
+        </div>
+        <span class="pill pill-gray" id="updated-pill">Fetching…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFRESH BAR -->
+  <div class="rbar">
+    <span class="rbar-info" id="refresh-info">Auto-refreshes every 5 min</span>
+    <button class="rbtn" onclick="loadAll()">↻ Refresh now</button>
+  </div>
+
+  <div id="err-area"></div>
+  <div id="loading" class="loading"><div class="spinner"></div><p>Fetching live data from Google Sheets…</p></div>
+
+  <div id="dashboard" style="display:none">
+
+    <!-- METRICS -->
+    <div class="metrics" id="metrics"></div>
+
+    <!-- GANTT -->
+    <div class="sdiv">Manufacturing timeline</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Project Gantt — Apr 20 → Jun 21</span>
+        <span class="card-meta" id="gantt-today-label"></span>
+      </div>
+      <div class="gantt-hdr">
+        <div class="gantt-lbl-space"></div>
+        <div class="gantt-dates-row" id="gantt-dates"></div>
+      </div>
+      <div id="gantt-rows"></div>
+      <div class="g-legend" id="gantt-legend"></div>
+    </div>
+
+    <!-- VENDOR -->
+    <div class="sdiv">Procurement by vendor</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Vendor status overview</span>
+        <span class="card-meta" id="vendor-meta"></span>
+      </div>
+      <div class="vendor-grid" id="vendor-grid"></div>
+    </div>
+
+    <!-- WORKSTREAMS -->
+    <div class="sdiv">Manufacturing workstreams</div>
+    <div class="ws-grid">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title" style="margin-bottom:14px">PCB Assembly <span style="color:var(--text3);font-weight:400">— 8 boards</span></div>
+        <div id="pcb"></div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title" style="margin-bottom:14px">Electronics Testing <span style="color:var(--text3);font-weight:400">— 12 items</span></div>
+        <div id="elec"></div>
+      </div>
+    </div>
+    <div class="ws-grid" style="margin-top:14px">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title" style="margin-bottom:14px">Mechanical Tasks</div>
+        <div id="mech"></div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title" style="margin-bottom:14px">Firmware Development</div>
+        <div id="fw"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* CONFIG */
+const BASE='2PACX-1vRD2P5dGMolqEplxAzOMZHQMp6lZ9pCBDoBEvwXkf3CO731-ooDZ2xAugwdTfiRBsChznJkcfv6lm5X';
+/* Purchases = gid 1120152543  |  Timeline = gid 0  (confirmed from user's pubhtml URLs) */
+const CSV_BUY=`https://docs.google.com/spreadsheets/d/e/${BASE}/pub?gid=1120152543&single=true&output=csv`;
+const DEADLINE=new Date('2026-06-21');
+const TODAY=new Date(); /* live date */
+
+/* GANTT */
+const GS=new Date('2026-04-20'),GE=new Date('2026-06-21');
+const GSPAN=(GE-GS)/864e5;
+const TASKS=[
+  {l:'Procurements',           s:'2026-04-20',e:'2026-05-05',c:'#4f8ef7'},
+  {l:'3D Printing',            s:'2026-04-25',e:'2026-05-12',c:'#2dd4bf'},
+  {l:'Tolerance check',        s:'2026-05-02',e:'2026-05-16',c:'#2dd4bf'},
+  {l:'Elec. component testing',s:'2026-05-07',e:'2026-05-28',c:'#f5a623'},
+  {l:'Firmware dev & testing', s:'2026-05-09',e:'2026-06-09',c:'#8b5cf6'},
+  {l:'PCB assembly',           s:'2026-05-12',e:'2026-06-09',c:'#ec4899'},
+  {l:'Drill & tap mechanical', s:'2026-05-09',e:'2026-05-28',c:'#f04f4f'},
+  {l:'Silicone casting',       s:'2026-05-16',e:'2026-05-30',c:'#f04f4f'},
+  {l:'Acrylic laser cutting',  s:'2026-05-14',e:'2026-05-26',c:'#f04f4f'},
+  {l:'Wiring & harnessing',    s:'2026-05-21',e:'2026-06-06',c:'#f04f4f'},
+  {l:'Post processing',        s:'2026-05-28',e:'2026-06-09',c:'#9098ae'},
+  {l:'Final assembly',         s:'2026-06-04',e:'2026-06-16',c:'#34c77b'},
+  {l:'AI Hand testing',        s:'2026-06-13',e:'2026-06-21',c:'#9098ae'},
+];
+const GANTT_LBLS=['Apr 20','May 7','May 21','Jun 4','Jun 16','Jun 21'];
+const GANTT_VALS=['2026-04-20','2026-05-07','2026-05-21','2026-06-04','2026-06-16','2026-06-21'];
+const LEGEND=[
+  {l:'Procurement',c:'#4f8ef7'},{l:'Fabrication',c:'#2dd4bf'},{l:'Electronics',c:'#f5a623'},
+  {l:'Firmware',c:'#8b5cf6'},{l:'PCB',c:'#ec4899'},{l:'Mechanical',c:'#f04f4f'},
+  {l:'Assembly',c:'#34c77b'},{l:'Testing',c:'#9098ae'}
+];
+
+/* WORKSTREAM STATIC DATA */
+const PCB=['Palm Controller PCB','Palm IO PCB','Finger Controller PCB','Finger FSR Connector PCB','Secondary Connector PCB','Secondary FSR PCB','Navigation Switches PCB','Track Sensing PCB'];
+const ELEC=['Dynamixel Motors','Waveshare Servos','Bottle Opening Linear Servo','Track Motor','Tweezer Stepper','Pancake Motor','MLX IR Sensor','VLX Distance Sensor','BNO055 IMU','BME280 Env Sensor','Navigation Switches','Seed Studio Camera'];
+const MECH=['Drill — Rack','Drill — Internal Struct 2','Tap — Rack','Tap — Tip SS','Tap — Base SS','Tap — Clamp Adapter','Tap — Internal Structure','Assembly — Primary Fingers','Assembly — Track mechanism','Assembly — Camera mechanism','Assembly — Palm','Assembly — Secondary Fingers'];
+const FW=['Actuator Control','Sensor Data Control','Primary Finger Control','Seed Studio Camera Control'];
+
+/* VENDOR REGION LOOKUP */
+const REGIONS={'Robotis':'Japan','PCB Power':'India','Misumi':'Japan','Amazon':'India','Onlyscrews':'India','Robu':'India','Digikey':'USA','Polulu':'USA','Evelta':'India','Probots':'India','Zbotic':'India','Thinkrobotics':'India','Keshou Motors China':'China','Chahai Motors China':'China','Roboticdna':'India','Offline':'Local','Poroti SLM':'India','JLC Sheet Metal':'China','Westbay':'India'};
+
+/* CSV PARSER */
+function parseCSV(txt){
+  const rows=[];let cur='',inQ=false,row=[];
+  for(let i=0;i<txt.length;i++){
+    const c=txt[i];
+    if(c==='"'){if(inQ&&txt[i+1]==='"'){cur+='"';i++}else inQ=!inQ}
+    else if(c===','&&!inQ){row.push(cur.trim());cur=''}
+    else if((c==='\n'||c==='\r')&&!inQ){
+      row.push(cur.trim());cur='';
+      if(row.some(x=>x))rows.push(row);
+      row=[];if(c==='\r'&&txt[i+1]==='\n')i++;
+    }else cur+=c;
+  }
+  if(row.length){row.push(cur.trim());if(row.some(x=>x))rows.push(row);}
+  return rows;
+}
+async function fetchCSV(url){const r=await fetch(url);if(!r.ok)throw new Error(`HTTP ${r.status}`);return parseCSV(await r.text())}
+
+/* PARSE PURCHASES — cols: 0=VendorSNo 1=Vendor 2=ItemSNo 3=Item 4=Qty 5=Link 6=Status 10=Remarks */
+function parsePurchases(rows){
+  const items=[];let vendor='';
+  for(const r of rows){
+    if(!r||r.length<4)continue;
+    const v=(r[1]||'').trim();
+    if(v&&v!=='Vendor'&&v!=='S No')vendor=v;
+    const name=(r[3]||'').trim();
+    if(!name||name==='Items'||name==='S No'||!vendor)continue;
+    const status=(r[6]||'').trim();
+    if(!status||status==='Status')continue;
+    items.push({vendor,name,qty:(r[4]||'').trim(),status,remarks:(r[10]||'').trim()});
+  }
+  return items;
+}
+
+/* RESOLVE STATUS */
+function resolveStatus(status,remarks){
+  const s=(status||'').toLowerCase(),r=(remarks||'').toLowerCase();
+  if(s.includes('delivered')||s.includes('received'))return{key:'delivered',label:'Delivered',cls:'pill-green'};
+  if(s.includes('shipped')||s.includes('transit'))return{key:'shipped',label:'Shipped',cls:'pill-blue'};
+  if(s.includes('ordered')&&!s.includes('to be'))return{key:'ordered',label:'Ordered',cls:'pill-blue'};
+  if(r.includes('out of stock'))return{key:'oos',label:'Out of stock',cls:'pill-red'};
+  return{key:'pending',label:'To be ordered',cls:'pill-amber'};
+}
+
+/* GANTT RENDER */
+function renderGantt(){
+  const todayPct=Math.min(100,Math.max(0,((TODAY-GS)/864e5)/GSPAN*100));
+  function pct(d){return Math.min(100,Math.max(0,((new Date(d)-GS)/864e5)/GSPAN*100))}
+  const dayName=TODAY.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  document.getElementById('gantt-today-label').textContent=`Today: ${dayName}`;
+  document.getElementById('gantt-dates').innerHTML=GANTT_LBLS.map(l=>`<span class="gantt-date-lbl">${l}</span>`).join('');
+  document.getElementById('gantt-rows').innerHTML=TASKS.map(t=>{
+    const s=pct(t.s),w=Math.max(pct(t.e)-s,1.5);
+    return `<div class="g-row">
+      <div class="g-label" title="${t.l}">${t.l}</div>
+      <div class="g-track">
+        <div class="g-today" style="left:${todayPct.toFixed(1)}%"><div class="g-today-label">today</div></div>
+        <div class="g-bar" style="left:${s.toFixed(1)}%;width:${w.toFixed(1)}%;background:${t.c}" title="${t.l}"></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('gantt-legend').innerHTML=LEGEND.map(l=>`<div class="g-leg-item"><div class="g-leg-sw" style="background:${l.c}"></div>${l.l}</div>`).join('');
+}
+
+/* VENDOR GRID */
+function renderVendors(items){
+  const map={};
+  items.forEach(i=>{
+    if(!map[i.vendor])map[i.vendor]={total:0,oos:0,ordered:0,delivered:0};
+    map[i.vendor].total++;
+    const st=resolveStatus(i.status,i.remarks);
+    if(st.key==='oos')map[i.vendor].oos++;
+    if(st.key==='ordered'||st.key==='shipped')map[i.vendor].ordered++;
+    if(st.key==='delivered')map[i.vendor].delivered++;
+  });
+  const sorted=Object.entries(map).sort((a,b)=>b[1].total-a[1].total);
+  const max=sorted[0]?.[1].total||1;
+  document.getElementById('vendor-meta').textContent=`${sorted.length} vendors · ${items.length} items total`;
+  document.getElementById('vendor-grid').innerHTML=sorted.map(([name,d])=>{
+    const hasOos=d.oos>0;
+    const pctW=Math.round(d.total/max*100);
+    let slabel,scls;
+    if(d.delivered===d.total){slabel='Delivered';scls='pill-green'}
+    else if(d.ordered>0||d.delivered>0){slabel='Partially ordered';scls='pill-blue'}
+    else if(hasOos){slabel='Out of stock';scls='pill-red'}
+    else{slabel='To be ordered';scls='pill-amber'}
+    const region=REGIONS[name]||'—';
+    const flagTxt=hasOos?`<span class="vc-flag">⚠ ${d.oos} out of stock</span>`:`<span class="vc-info">${d.total} item${d.total!==1?'s':''}</span>`;
+    return `<div class="vc${hasOos?' flagged':''}">
+      <div class="vc-top">
+        <div><div class="vc-name">${name}</div><div class="vc-region">${region}</div></div>
+        <div><div class="vc-count">${d.total}</div><div class="vc-count-lbl">items</div></div>
+      </div>
+      <div class="vc-track"><div class="vc-fill" style="width:${pctW}%"></div></div>
+      <div class="vc-foot">
+        <span class="pill ${scls}" style="font-size:10px;padding:3px 10px">${slabel}</span>
+        ${flagTxt}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* WORKSTREAM LIST */
+function wsList(items,mode){
+  return items.map(n=>{
+    const cls=mode==='untested'?'ws-untested':'ws-pending';
+    const lbl=mode==='untested'?'Not tested':'To be started';
+    return `<div class="ws-item"><span class="ws-name">${n}</span><span class="ws-badge ${cls}">${lbl}</span></div>`;
+  }).join('');
+}
+
+/* MAIN RENDER */
+function renderDashboard(items){
+  const daysLeft=Math.ceil((DEADLINE-TODAY)/864e5);
+  document.getElementById('days-left').textContent=daysLeft;
+  const now=new Date();
+  document.getElementById('updated-pill').textContent=`Updated ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+
+  const total=items.length;
+  const vendors=new Set(items.map(i=>i.vendor)).size;
+  const ordered=items.filter(i=>{const s=resolveStatus(i.status,i.remarks).key;return s==='ordered'||s==='shipped'||s==='delivered'}).length;
+  const delivered=items.filter(i=>resolveStatus(i.status,i.remarks).key==='delivered').length;
+  const oos=items.filter(i=>resolveStatus(i.status,i.remarks).key==='oos').length;
+
+  document.getElementById('metrics').innerHTML=[
+    {lbl:'Total items',val:total,sub:`${vendors} vendors`,cls:''},
+    {lbl:'Ordered',val:ordered,sub:`${Math.round(ordered/total*100||0)}% complete`,cls:'c-accent'},
+    {lbl:'Delivered',val:delivered,sub:'confirmed received',cls:'c-green'},
+    {lbl:'Out of stock',val:oos,sub:'need alternates',cls:'c-red'},
+    {lbl:'Days left',val:daysLeft,sub:'to Jun 21 deadline',cls:daysLeft<30?'c-red':'c-amber'},
+  ].map((m,i)=>`<div class="metric fi" style="animation-delay:${i*.06}s">
+    <div class="metric-lbl">${m.lbl}</div>
+    <div class="metric-val ${m.cls}">${m.val}</div>
+    <div class="metric-sub">${m.sub}</div>
+  </div>`).join('');
+
+  renderGantt();
+  renderVendors(items);
+  document.getElementById('pcb').innerHTML=wsList(PCB,'pending');
+  document.getElementById('elec').innerHTML=wsList(ELEC,'untested');
+  document.getElementById('mech').innerHTML=wsList(MECH,'pending');
+  document.getElementById('fw').innerHTML=wsList(FW,'pending');
+}
+
+/* LOAD */
+let timer=null;
+async function loadAll(){
+  document.getElementById('err-area').innerHTML='';
+  document.getElementById('loading').style.display='block';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('refresh-info').textContent='Refreshing…';
+  try{
+    const rows=await fetchCSV(CSV_BUY);
+    const items=parsePurchases(rows);
+    if(!items.length)throw new Error('No procurement data parsed. Ensure the Purchases sheet is published to web as CSV (File → Share → Publish to web).');
+    renderDashboard(items);
+    document.getElementById('loading').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+  }catch(e){
+    document.getElementById('err-area').innerHTML=`<div class="err">⚠ ${e.message}</div>`;
+    renderGantt();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+  }
+  document.getElementById('refresh-info').textContent='Auto-refreshes every 5 min';
+  if(timer)clearTimeout(timer);
+  timer=setTimeout(loadAll,5*60*1000);
+}
+loadAll();
+</script>
+</body>
+</html>

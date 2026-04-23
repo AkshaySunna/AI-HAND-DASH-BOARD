@@ -223,29 +223,22 @@ const DEADLINE=new Date('2026-06-21');
 const TODAY=new Date(); /* live date */
 
 /* GANTT */
-const GS=new Date('2026-04-20'),GE=new Date('2026-06-21');
-const GSPAN=(GE-GS)/864e5;
-const TASKS=[
-  {l:'Procurements',           s:'2026-04-20',e:'2026-05-05',c:'#4f8ef7'},
-  {l:'3D Printing',            s:'2026-04-25',e:'2026-05-12',c:'#2dd4bf'},
-  {l:'Tolerance check',        s:'2026-05-02',e:'2026-05-16',c:'#2dd4bf'},
-  {l:'Elec. component testing',s:'2026-05-07',e:'2026-05-28',c:'#f5a623'},
-  {l:'Firmware dev & testing', s:'2026-05-09',e:'2026-06-09',c:'#8b5cf6'},
-  {l:'PCB assembly',           s:'2026-05-12',e:'2026-06-09',c:'#ec4899'},
-  {l:'Drill & tap mechanical', s:'2026-05-09',e:'2026-05-28',c:'#f04f4f'},
-  {l:'Silicone casting',       s:'2026-05-16',e:'2026-05-30',c:'#f04f4f'},
-  {l:'Acrylic laser cutting',  s:'2026-05-14',e:'2026-05-26',c:'#f04f4f'},
-  {l:'Wiring & harnessing',    s:'2026-05-21',e:'2026-06-06',c:'#f04f4f'},
-  {l:'Post processing',        s:'2026-05-28',e:'2026-06-09',c:'#9098ae'},
-  {l:'Final assembly',         s:'2026-06-04',e:'2026-06-16',c:'#34c77b'},
-  {l:'AI Hand testing',        s:'2026-06-13',e:'2026-06-21',c:'#9098ae'},
-];
-const GANTT_LBLS=['Apr 20','May 7','May 21','Jun 4','Jun 16','Jun 21'];
-const GANTT_VALS=['2026-04-20','2026-05-07','2026-05-21','2026-06-04','2026-06-16','2026-06-21'];
-const LEGEND=[
-  {l:'Procurement',c:'#4f8ef7'},{l:'Fabrication',c:'#2dd4bf'},{l:'Electronics',c:'#f5a623'},
-  {l:'Firmware',c:'#8b5cf6'},{l:'PCB',c:'#ec4899'},{l:'Mechanical',c:'#f04f4f'},
-  {l:'Assembly',c:'#34c77b'},{l:'Testing',c:'#9098ae'}
+const GS = new Date('2026-04-20'), GE = new Date('2026-06-21');
+const GSPAN = (GE - GS) / 864e5;
+const TASKS = [
+  {l:'Procurements',                        s:'2026-04-20',e:'2026-05-21',c:'#4f8ef7'},
+  {l:'3D Printing',                         s:'2026-04-20',e:'2026-05-12',c:'#2dd4bf'},
+  {l:'Tolerance check',                     s:'2026-05-19',e:'2026-05-28',c:'#2dd4bf'},
+  {l:'Electronic Components Testing',       s:'2026-05-23',e:'2026-05-30',c:'#f5a623'},
+  {l:'Firmware Development and Testing',    s:'2026-05-26',e:'2026-06-04',c:'#8b5cf6'},
+  {l:'PCB Assembly',                        s:'2026-05-30',e:'2026-06-06',c:'#ec4899'},
+  {l:'Drill and Tap Mechanical Components', s:'2026-06-02',e:'2026-06-06',c:'#f04f4f'},
+  {l:'Silicone Casting',                    s:'2026-06-02',e:'2026-06-06',c:'#f04f4f'},
+  {l:'Acrylic Laser Cutting',               s:'2026-06-02',e:'2026-06-06',c:'#f04f4f'},
+  {l:'Wiring and Cable Harnessing',         s:'2026-06-04',e:'2026-06-11',c:'#f04f4f'},
+  {l:'Post Processing',                     s:'2026-06-06',e:'2026-06-13',c:'#9098ae'},
+  {l:'Final Assembly',                      s:'2026-06-09',e:'2026-06-16',c:'#34c77b'},
+  {l:'Entire AI HAND Testing',              s:'2026-06-11',e:'2026-06-20',c:'#9098ae'}
 ];
 
 /* WORKSTREAM STATIC DATA */
